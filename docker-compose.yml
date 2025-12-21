@@ -30,11 +30,11 @@ services:
       - 8080:80
     depends_on:
       - db
-  # mailhog:
-  #   image: mailhog/mailhog
-  #   ports:
-  #     - 8025:8025
-  #     - 1025:1025
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
 
 volumes:
   db-store:
