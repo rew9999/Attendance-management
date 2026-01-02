@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +22,31 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // ログイン後のリダイレクト処理
+        $this->app->singleton(LoginResponse::class, function () {
+            return new class implements LoginResponse {
+                public function toResponse($request)
+                {
+                    $user = auth()->user();
+
+                    if ($user->role === 'admin') {
+                        return redirect('/admin/attendance/list');
+                    }
+
+                    return redirect('/attendance');
+                }
+            };
+        });
+
+        // 会員登録後のリダイレクト処理
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    return redirect('/attendance');
+                }
+            };
+        });
     }
 
     /**
@@ -33,8 +59,13 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
-        // ログイン画面
+        // ログイン画面（一般ユーザー）
         Fortify::loginView(function () {
+            // 管理者ログインの場合
+            if (request()->is('admin/login')) {
+                return view('auth.admin-login');
+            }
+            // 一般ユーザーログイン
             return view('auth.login');
         });
 

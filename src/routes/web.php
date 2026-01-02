@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 管理者ログイン画面
+Route::get('/admin/login', function () {
+    return view('auth.admin-login');
+})->middleware('guest')->name('admin.login');
+
 // メール認証確認画面（一般ユーザー）
 Route::get('/stamp_correction_request/list', function () {
     return view('auth.verify-email');
