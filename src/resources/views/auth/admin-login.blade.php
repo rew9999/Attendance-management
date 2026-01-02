@@ -16,7 +16,7 @@
     </header>
     <main>
         <h1>管理者ログイン</h1>
-        <form method="POST" action="/admin/login">
+        <form method="POST" action="/login">
             @csrf
             <div class="form-group">
                 <label for="email">メールアドレス</label>

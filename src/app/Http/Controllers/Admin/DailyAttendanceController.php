@@ -17,15 +17,17 @@ class DailyAttendanceController extends Controller
     {
         // デフォルトは今日の日付
         $date = $request->filled('date')
-            ? Carbon::parse($request->date)->toDateString()
-            : Carbon::today()->toDateString();
+            ? Carbon::parse($request->date)
+            : Carbon::today();
+
+        $dateString = $date->toDateString();
 
         // 名前検索
         $nameQuery = $request->filled('name') ? $request->name : null;
 
         // 勤怠データを取得
         $query = Attendance::with(['user', 'breaks'])
-            ->where('date', $date)
+            ->where('date', $dateString)
             ->whereHas('user', function($q) {
                 $q->where('role', 'employee');
             });
