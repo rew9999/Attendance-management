@@ -68,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // 日別勤怠一覧画面（管理者）
         Route::get('/attendance/date/{id}', [DailyAttendanceController::class, 'show'])->name('attendance.date');
+        Route::put('/attendance/date/{id}', [DailyAttendanceController::class, 'update'])->name('attendance.update');
 
         // スタッフ一覧画面（管理者）
         Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
