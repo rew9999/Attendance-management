@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             EmployeeUserSeeder::class,
             AttendanceSeeder::class,
+            AttendanceCorrectionRequestSeeder::class,
         ]);
     }
 }

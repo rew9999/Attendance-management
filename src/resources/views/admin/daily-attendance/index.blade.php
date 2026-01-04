@@ -43,8 +43,22 @@
                         <td>{{ $attendance->user->name }}</td>
                         <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '-' }}</td>
                         <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '-' }}</td>
-                        <td>{{ $attendance->total_break_time ? gmdate('H:i', $attendance->total_break_time) : '0:00' }}</td>
-                        <td>{{ $attendance->total_work_time ? gmdate('H:i', $attendance->total_work_time) : '0:00' }}</td>
+                        <td>
+                            @php
+                                $breakMinutes = $attendance->getTotalBreakMinutes();
+                                $breakHours = floor($breakMinutes / 60);
+                                $breakMins = $breakMinutes % 60;
+                            @endphp
+                            {{ sprintf('%d:%02d', $breakHours, $breakMins) }}
+                        </td>
+                        <td>
+                            @php
+                                $workMinutes = $attendance->getWorkMinutes();
+                                $workHours = floor($workMinutes / 60);
+                                $workMins = $workMinutes % 60;
+                            @endphp
+                            {{ sprintf('%d:%02d', $workHours, $workMins) }}
+                        </td>
                         <td>
                             <a href="{{ route('admin.attendance.date', ['id' => $attendance->id]) }}" class="detail-button">詳細</a>
                         </td>

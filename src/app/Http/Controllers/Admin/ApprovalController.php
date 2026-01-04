@@ -12,10 +12,12 @@ class ApprovalController extends Controller
     /**
      * 承認待ち申請一覧を表示
      */
-    public function index()
+    public function index(Request $request)
     {
+        $status = $request->get('status', 'pending');
+
         $requests = AttendanceCorrectionRequest::with(['user', 'attendance'])
-            ->where('status', 'pending')
+            ->where('status', $status)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -30,7 +32,7 @@ class ApprovalController extends Controller
         $correctionRequest = AttendanceCorrectionRequest::with([
             'user',
             'attendance.breaks',
-            'breakCorrections'
+            'breakCorrectionRequests'
         ])->findOrFail($id);
 
         return view('admin.approval.show', compact('correctionRequest'));
@@ -41,7 +43,7 @@ class ApprovalController extends Controller
      */
     public function approve(Request $request, $id)
     {
-        $correctionRequest = AttendanceCorrectionRequest::with(['attendance', 'breakCorrections'])
+        $correctionRequest = AttendanceCorrectionRequest::with(['attendance', 'breakCorrectionRequests'])
             ->findOrFail($id);
 
         if ($correctionRequest->status !== 'pending') {
@@ -62,7 +64,7 @@ class ApprovalController extends Controller
         $attendance->save();
 
         // 休憩時間の修正を適用
-        foreach ($correctionRequest->breakCorrections as $breakCorrection) {
+        foreach ($correctionRequest->breakCorrectionRequests as $breakCorrection) {
             if ($breakCorrection->break_id) {
                 // 既存の休憩を更新
                 $break = $attendance->breaks()->find($breakCorrection->break_id);
@@ -88,7 +90,12 @@ class ApprovalController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        return redirect('/admin/approval')->with('success', '申請を承認しました');
+        // Ajax リクエストの場合はJSONを返す
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => '申請を承認しました']);
+        }
+
+        return redirect()->route('admin.stamp_correction_request.list')->with('success', '申請を承認しました');
     }
 
     /**

@@ -74,7 +74,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
 
         // スタッフ別勤怠一覧画面（管理者）
-        Route::get('/attendance/staff/{id}', [StaffController::class, 'attendance'])->name('attendance.staff');
+        Route::get('/attendance/staff/{id}', [StaffController::class, 'show'])->name('attendance.staff');
+
+        // スタッフ別勤怠CSV出力（管理者）
+        Route::get('/attendance/staff/{id}/export', [StaffController::class, 'export'])->name('attendance.staff.export');
 
         // 申請一覧画面（管理者）
         Route::get('/stamp_correction_request/list', [ApprovalController::class, 'index'])->name('stamp_correction_request.list');

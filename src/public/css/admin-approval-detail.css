@@ -33,7 +33,6 @@ h1 {
 
 .detail-row {
     display: flex;
-    grid-template-columns: 120px 1fr;
     border-bottom: 1px solid #e0e0e0;
     min-height: 60px;
 }
@@ -92,39 +91,8 @@ h1 {
     margin-right: 75px;
     flex: 1;
     padding: 20px 50px 20px 15px;
-}
-
-.time-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    background-color: white;
-}
-
-.time-input:focus {
-    outline: none;
-    border-color: #999;
-}
-
-.remarks-area {
-    width: 100%;
-    min-height: 80px;
-    padding: 10px 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
     font-size: 14px;
-    font-family: Arial, sans-serif;
-    resize: none;
-    background-color: white;
-}
-
-.remarks-area:focus {
-    outline: none;
-    border-color: #999;
+    color: #333;
 }
 
 .button-container {
@@ -133,7 +101,7 @@ h1 {
     justify-content: flex-end;
 }
 
-.submit-button {
+.approve-button {
     padding: 12px 40px;
     background-color: #000;
     color: white;
@@ -144,6 +112,16 @@ h1 {
     transition: background-color 0.2s;
 }
 
-.submit-button:hover {
+.approve-button:hover {
     background-color: #333;
+}
+
+.approved-button {
+    padding: 12px 40px;
+    background-color: #999;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: not-allowed;
 }

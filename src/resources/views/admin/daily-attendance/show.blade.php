@@ -21,7 +21,7 @@
             <div class="detail-card">
                 <div class="detail-row">
                     <div class="detail-label">名前</div>
-                    <div class="detail-value">{{ $attendance->user->name }}</div>
+                    <div class="detail-value name-value">{{ $attendance->user->name }}</div>
                 </div>
 
                 <div class="detail-row">
