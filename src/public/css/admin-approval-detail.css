@@ -1,0 +1,127 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    border-left: 4px solid #000;
+}
+
+.detail-card {
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.detail-row {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    min-height: 60px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 200px;
+    padding: 20px 15px 20px 50px;
+    background-color: white;
+    font-weight: bold;
+    font-size: 14px;
+    color: #6d6d6d;
+    display: flex;
+    align-items: center;
+}
+
+.detail-value {
+    margin-left: 50px;
+    width: 100px;
+    padding: 20px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    align-items: center;
+    text-align: center;
+}
+
+.detail-value.name-value {
+    flex: 1;
+    text-align: left;
+    margin-right: 50px;
+}
+
+.detail-separator {
+    margin-left: 50px;
+    width: 100px;
+    padding: 20px 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    align-items: center;
+    text-align: center;
+}
+
+.detail-row:has(.detail-value-full) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.detail-value-full {
+    margin-left: 50px;
+    margin-right: 75px;
+    flex: 1;
+    padding: 20px 50px 20px 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.approve-button {
+    padding: 12px 40px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.approve-button:hover {
+    background-color: #333;
+}
+
+.approved-button {
+    padding: 12px 40px;
+    background-color: #999;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: not-allowed;
+}

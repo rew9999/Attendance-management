@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 管理者ログイン画面
+Route::get('/admin/login', function () {
+    return view('auth.admin-login');
+})->middleware('guest')->name('admin.login');
+
 // メール認証確認画面（一般ユーザー）
 Route::get('/stamp_correction_request/list', function () {
     return view('auth.verify-email');
@@ -63,12 +68,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // 日別勤怠一覧画面（管理者）
         Route::get('/attendance/date/{id}', [DailyAttendanceController::class, 'show'])->name('attendance.date');
+        Route::put('/attendance/date/{id}', [DailyAttendanceController::class, 'update'])->name('attendance.update');
 
         // スタッフ一覧画面（管理者）
         Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
 
         // スタッフ別勤怠一覧画面（管理者）
-        Route::get('/attendance/staff/{id}', [StaffController::class, 'attendance'])->name('attendance.staff');
+        Route::get('/attendance/staff/{id}', [StaffController::class, 'show'])->name('attendance.staff');
+
+        // スタッフ別勤怠CSV出力（管理者）
+        Route::get('/attendance/staff/{id}/export', [StaffController::class, 'export'])->name('attendance.staff.export');
 
         // 申請一覧画面（管理者）
         Route::get('/stamp_correction_request/list', [ApprovalController::class, 'index'])->name('stamp_correction_request.list');

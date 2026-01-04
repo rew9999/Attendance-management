@@ -17,15 +17,17 @@ class DailyAttendanceController extends Controller
     {
         // デフォルトは今日の日付
         $date = $request->filled('date')
-            ? Carbon::parse($request->date)->toDateString()
-            : Carbon::today()->toDateString();
+            ? Carbon::parse($request->date)
+            : Carbon::today();
+
+        $dateString = $date->toDateString();
 
         // 名前検索
         $nameQuery = $request->filled('name') ? $request->name : null;
 
         // 勤怠データを取得
         $query = Attendance::with(['user', 'breaks'])
-            ->where('date', $date)
+            ->where('date', $dateString)
             ->whereHas('user', function($q) {
                 $q->where('role', 'employee');
             });
@@ -55,6 +57,57 @@ class DailyAttendanceController extends Controller
         }
 
         return view('admin.daily-attendance.index', compact('attendances', 'employeesWithoutAttendance', 'date'));
+    }
+
+    /**
+     * 勤怠詳細を表示
+     */
+    public function show($id)
+    {
+        $attendance = Attendance::with(['user', 'breaks'])
+            ->findOrFail($id);
+
+        return view('admin.daily-attendance.show', compact('attendance'));
+    }
+
+    /**
+     * 勤怠詳細を更新
+     */
+    public function update(Request $request, $id)
+    {
+        $attendance = Attendance::with('breaks')->findOrFail($id);
+
+        // バリデーション
+        $request->validate([
+            'clock_in' => 'nullable|date_format:H:i',
+            'clock_out' => 'nullable|date_format:H:i',
+            'remarks' => 'nullable|string|max:1000',
+        ]);
+
+        // 出勤・退勤時刻を更新
+        $date = $attendance->date;
+
+        $attendance->update([
+            'clock_in' => $request->clock_in ? Carbon::parse($date . ' ' . $request->clock_in) : null,
+            'clock_out' => $request->clock_out ? Carbon::parse($date . ' ' . $request->clock_out) : null,
+            'remarks' => $request->remarks,
+        ]);
+
+        // 休憩時間を更新
+        if ($request->has('breaks')) {
+            foreach ($request->breaks as $breakId => $breakData) {
+                $break = $attendance->breaks()->find($breakId);
+
+                if ($break) {
+                    $break->update([
+                        'break_start' => isset($breakData['break_start']) ? Carbon::parse($date . ' ' . $breakData['break_start']) : null,
+                        'break_end' => isset($breakData['break_end']) ? Carbon::parse($date . ' ' . $breakData['break_end']) : null,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.attendance.date', $id)->with('success', '勤怠情報を更新しました');
     }
 
     /**
