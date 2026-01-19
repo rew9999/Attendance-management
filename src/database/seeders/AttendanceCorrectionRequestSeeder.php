@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Attendance;
 use App\Models\AttendanceCorrectionRequest;
 use App\Models\BreakCorrectionRequest;
-use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -23,6 +23,16 @@ class AttendanceCorrectionRequestSeeder extends Seeder
 
         if ($employees->isEmpty()) {
             $this->command->warn('一般ユーザーが存在しません。先にEmployeeUserSeederを実行してください。');
+
+            return;
+        }
+
+        // 管理者ユーザーを取得
+        $admin = User::where('role', 'admin')->first();
+
+        if (! $admin) {
+            $this->command->warn('管理者ユーザーが存在しません。先にAdminUserSeederを実行してください。');
+
             return;
         }
 
@@ -55,7 +65,7 @@ class AttendanceCorrectionRequestSeeder extends Seeder
                     'reason' => '遅延のため',
                     'status' => $status,
                     'approved_at' => $status === 'approved' ? now() : null,
-                    'approved_by' => $status === 'approved' ? 1 : null,
+                    'approved_by' => $status === 'approved' ? $admin->id : null,
                     'created_at' => now()->subDays($index),
                 ]);
 

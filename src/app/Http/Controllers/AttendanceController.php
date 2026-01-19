@@ -82,7 +82,7 @@ class AttendanceController extends Controller
             ->whereNull('clock_out')
             ->first();
 
-        if (!$attendance) {
+        if (! $attendance) {
             return redirect('/attendance')->with('error', '出勤打刻が記録されていません');
         }
 
@@ -114,7 +114,7 @@ class AttendanceController extends Controller
             ->whereNull('clock_out')
             ->first();
 
-        if (!$attendance) {
+        if (! $attendance) {
             return redirect('/attendance')->with('error', '出勤打刻が記録されていません');
         }
 
@@ -148,7 +148,7 @@ class AttendanceController extends Controller
             ->whereNull('clock_out')
             ->first();
 
-        if (!$attendance) {
+        if (! $attendance) {
             return redirect('/attendance')->with('error', '出勤打刻が記録されていません');
         }
 
@@ -162,7 +162,7 @@ class AttendanceController extends Controller
             ->whereNull('break_end')
             ->first();
 
-        if (!$currentBreak) {
+        if (! $currentBreak) {
             return redirect('/attendance')->with('error', '休憩開始が記録されていません');
         }
 

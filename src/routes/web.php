@@ -33,8 +33,16 @@ Route::get('/stamp_correction_request/list', function () {
 // メール認証処理
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
+
     return redirect('/attendance');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+// メール認証再送信
+Route::post('/email/verification-notification', function (Illuminate\Http\Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // 認証済みユーザー共通
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -54,6 +62,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // 勤怠詳細画面（一般ユーザー）
         Route::get('/attendance/data/{id}', [AttendanceRecordController::class, 'show'])->name('employee.attendance.data');
+
+        // 申請一覧画面（一般ユーザー）
+        Route::get('/correction/requests', [CorrectionRequestController::class, 'index'])->name('employee.correction.index');
+
+        // 申請詳細画面（一般ユーザー）
+        Route::get('/correction/requests/{id}', [CorrectionRequestController::class, 'show'])->name('employee.correction.show');
 
         // 勤怠修正申請画面（一般ユーザー）
         Route::get('/attendance/edit/request/{id}', [CorrectionRequestController::class, 'create'])->name('employee.attendance.edit.request');

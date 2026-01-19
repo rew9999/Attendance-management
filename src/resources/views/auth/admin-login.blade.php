@@ -9,11 +9,7 @@
 </head>
 
 <body>
-    <header>
-        <nav class="login-nav">
-            <a href="{{route('admin.login')}}" class="logo"></a>
-        </nav>
-    </header>
+    <x-auth-header />
     <main>
         <h1>管理者ログイン</h1>
         <form method="POST" action="/login">

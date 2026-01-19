@@ -12,9 +12,7 @@ header {
     justify-content: space-between;
 }
 
-header::before {
-    content: '';
-    display: block;
+.header-logo {
     width: 200px;
     height: 30px;
     background-image: url('../images/勤怠管理アプリ ヘッダーロゴ.png');
