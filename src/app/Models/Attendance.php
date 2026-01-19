@@ -73,6 +73,7 @@ class Attendance extends Model
                 $total += $start->diffInMinutes($end);
             }
         }
+
         return $total;
     }
 
@@ -81,7 +82,7 @@ class Attendance extends Model
      */
     public function getWorkMinutes()
     {
-        if (!$this->clock_in || !$this->clock_out) {
+        if (! $this->clock_in || ! $this->clock_out) {
             return 0;
         }
 

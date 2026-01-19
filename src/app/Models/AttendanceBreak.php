@@ -35,7 +35,7 @@ class AttendanceBreak extends Model
      */
     public function getBreakMinutes()
     {
-        if (!$this->break_end) {
+        if (! $this->break_end) {
             return 0;
         }
 

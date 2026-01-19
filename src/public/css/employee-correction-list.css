@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    border-left: 4px solid #000;
+}
+
+/* タブナビゲーション */
+.tab-navigation {
+    display: flex;
+    gap: 0;
+    margin-bottom: 30px;
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    width: fit-content;
+}
+
+.tab-button {
+    padding: 12px 40px;
+    background-color: white;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-right: none;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.tab-button:last-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.tab-button.active {
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: #fafafa;
+}
+
+/* テーブルコンテナ */
+.table-container {
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.request-table thead {
+    background-color: #f8f8f8;
+}
+
+.request-table th {
+    background-color: #f8f8f8;
+    padding: 15px 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.request-table td {
+    padding: 15px 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+}
+
+.request-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.request-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 状態バッジ */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* 詳細リンク */
+.detail-link {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
+
+/* 空メッセージ */
+.empty-message {
+    text-align: center;
+    color: #999;
+    padding: 40px !important;
+}
+
+/* ページネーション */
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}

@@ -13,6 +13,8 @@ class AttendanceCorrectionTest extends TestCase
 
     /**
      * 出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     *
+     * @group validation
      */
     public function test_clock_in_cannot_be_after_clock_out()
     {
@@ -35,6 +37,8 @@ class AttendanceCorrectionTest extends TestCase
 
     /**
      * 休憩開始時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     *
+     * @group validation
      */
     public function test_break_start_cannot_be_after_clock_out()
     {
@@ -53,7 +57,7 @@ class AttendanceCorrectionTest extends TestCase
                 [
                     'requested_break_start' => '2025-01-01 19:00',
                     'requested_break_end' => '2025-01-01 20:00',
-                ]
+                ],
             ],
             'reason' => '修正理由',
         ]);
@@ -63,6 +67,8 @@ class AttendanceCorrectionTest extends TestCase
 
     /**
      * 休憩終了時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     *
+     * @group validation
      */
     public function test_break_end_cannot_be_after_clock_out()
     {
@@ -81,7 +87,7 @@ class AttendanceCorrectionTest extends TestCase
                 [
                     'requested_break_start' => '2025-01-01 12:00',
                     'requested_break_end' => '2025-01-01 19:00',
-                ]
+                ],
             ],
             'reason' => '修正理由',
         ]);

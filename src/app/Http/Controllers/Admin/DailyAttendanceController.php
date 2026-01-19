@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
@@ -28,13 +29,13 @@ class DailyAttendanceController extends Controller
         // 勤怠データを取得
         $query = Attendance::with(['user', 'breaks'])
             ->where('date', $dateString)
-            ->whereHas('user', function($q) {
+            ->whereHas('user', function ($q) {
                 $q->where('role', 'employee');
             });
 
         if ($nameQuery) {
-            $query->whereHas('user', function($q) use ($nameQuery) {
-                $q->where('name', 'like', '%' . $nameQuery . '%');
+            $query->whereHas('user', function ($q) use ($nameQuery) {
+                $q->where('name', 'like', '%'.$nameQuery.'%');
             });
         }
 
@@ -43,14 +44,14 @@ class DailyAttendanceController extends Controller
         // 勤怠データがないスタッフも表示する場合
         $employeesWithoutAttendance = collect();
 
-        if (!$nameQuery || $request->filled('show_all')) {
+        if (! $nameQuery || $request->filled('show_all')) {
             $attendedUserIds = $attendances->pluck('user_id')->toArray();
 
             $employeesQuery = User::where('role', 'employee')
                 ->whereNotIn('id', $attendedUserIds);
 
             if ($nameQuery) {
-                $employeesQuery->where('name', 'like', '%' . $nameQuery . '%');
+                $employeesQuery->where('name', 'like', '%'.$nameQuery.'%');
             }
 
             $employeesWithoutAttendance = $employeesQuery->get();
@@ -73,23 +74,16 @@ class DailyAttendanceController extends Controller
     /**
      * 勤怠詳細を更新
      */
-    public function update(Request $request, $id)
+    public function update(UpdateAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
-
-        // バリデーション
-        $request->validate([
-            'clock_in' => 'nullable|date_format:H:i',
-            'clock_out' => 'nullable|date_format:H:i',
-            'remarks' => 'nullable|string|max:1000',
-        ]);
 
         // 出勤・退勤時刻を更新
         $date = $attendance->date;
 
         $attendance->update([
-            'clock_in' => $request->clock_in ? Carbon::parse($date . ' ' . $request->clock_in) : null,
-            'clock_out' => $request->clock_out ? Carbon::parse($date . ' ' . $request->clock_out) : null,
+            'clock_in' => $request->clock_in ? Carbon::parse($date.' '.$request->clock_in) : null,
+            'clock_out' => $request->clock_out ? Carbon::parse($date.' '.$request->clock_out) : null,
             'remarks' => $request->remarks,
         ]);
 
@@ -100,8 +94,8 @@ class DailyAttendanceController extends Controller
 
                 if ($break) {
                     $break->update([
-                        'break_start' => isset($breakData['break_start']) ? Carbon::parse($date . ' ' . $breakData['break_start']) : null,
-                        'break_end' => isset($breakData['break_end']) ? Carbon::parse($date . ' ' . $breakData['break_end']) : null,
+                        'break_start' => isset($breakData['break_start']) ? Carbon::parse($date.' '.$breakData['break_start']) : null,
+                        'break_end' => isset($breakData['break_end']) ? Carbon::parse($date.' '.$breakData['break_end']) : null,
                     ]);
                 }
             }
@@ -121,7 +115,7 @@ class DailyAttendanceController extends Controller
 
         $attendances = Attendance::with(['user', 'breaks'])
             ->where('date', $date)
-            ->whereHas('user', function($q) {
+            ->whereHas('user', function ($q) {
                 $q->where('role', 'employee');
             })
             ->orderBy('clock_in', 'asc')
@@ -137,7 +131,7 @@ class DailyAttendanceController extends Controller
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function() use ($attendances) {
+        $callback = function () use ($attendances) {
             $stream = fopen('php://output', 'w');
 
             // BOMを追加（Excel対応）

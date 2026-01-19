@@ -21,30 +21,35 @@ class EmployeeUserSeeder extends Seeder
                 'email' => 'yamada@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'employee',
+                'email_verified_at' => now(),
             ],
             [
                 'name' => '佐藤 花子',
                 'email' => 'sato@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'employee',
+                'email_verified_at' => now(),
             ],
             [
                 'name' => '鈴木 一郎',
                 'email' => 'suzuki@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'employee',
+                'email_verified_at' => now(),
             ],
             [
                 'name' => '田中 美咲',
                 'email' => 'tanaka@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'employee',
+                'email_verified_at' => now(),
             ],
             [
                 'name' => '高橋 健太',
                 'email' => 'takahashi@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'employee',
+                'email_verified_at' => now(),
             ],
         ];
 

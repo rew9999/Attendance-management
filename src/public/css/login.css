@@ -86,3 +86,17 @@ button[type="submit"]:hover {
     font-size: 12px;
     margin-top: 5px;
 }
+
+.register-link {
+    text-align: center;
+}
+
+.register-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}

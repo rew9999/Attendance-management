@@ -16,29 +16,39 @@ class AttendanceRecordController extends Controller
     {
         $user = auth()->user();
 
-        $query = Attendance::with('breaks')
+        // 月の指定（デフォルトは今月）
+        $currentMonth = $request->filled('month')
+            ? Carbon::parse($request->month)
+            : Carbon::now();
+
+        // 当月の開始日と終了日
+        $startDate = $currentMonth->copy()->startOfMonth();
+        $endDate = $currentMonth->copy()->endOfMonth();
+
+        // 当月の全日付を生成
+        $allDates = [];
+        $date = $startDate->copy();
+        while ($date <= $endDate) {
+            $allDates[$date->toDateString()] = null;
+            $date->addDay();
+        }
+
+        // 当月の勤怠データを取得
+        $attendances = Attendance::with('breaks')
             ->where('user_id', $user->id)
-            ->orderBy('date', 'desc');
+            ->whereYear('date', $currentMonth->year)
+            ->whereMonth('date', $currentMonth->month)
+            ->orderBy('date', 'asc')
+            ->get()
+            ->keyBy(function ($item) {
+                return $item->date->format('Y-m-d');
+            });
 
-        // 日付範囲フィルター
-        if ($request->filled('start_date')) {
-            $query->where('date', '>=', $request->start_date);
-        }
+        // 前月・翌月の日付
+        $prevMonth = $currentMonth->copy()->subMonth();
+        $nextMonth = $currentMonth->copy()->addMonth();
 
-        if ($request->filled('end_date')) {
-            $query->where('date', '<=', $request->end_date);
-        }
-
-        // 月フィルター
-        if ($request->filled('month')) {
-            $month = Carbon::parse($request->month);
-            $query->whereYear('date', $month->year)
-                  ->whereMonth('date', $month->month);
-        }
-
-        $attendances = $query->paginate(31);
-
-        return view('employee.attendance.index', compact('attendances'));
+        return view('employee.attendance.index', compact('attendances', 'allDates', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
 
     /**

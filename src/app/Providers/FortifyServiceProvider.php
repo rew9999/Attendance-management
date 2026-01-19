@@ -6,14 +6,16 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -24,7 +26,8 @@ class FortifyServiceProvider extends ServiceProvider
     {
         // ログイン後のリダイレクト処理
         $this->app->singleton(LoginResponse::class, function () {
-            return new class implements LoginResponse {
+            return new class implements LoginResponse
+            {
                 public function toResponse($request)
                 {
                     $user = auth()->user();
@@ -40,10 +43,30 @@ class FortifyServiceProvider extends ServiceProvider
 
         // 会員登録後のリダイレクト処理
         $this->app->singleton(RegisterResponse::class, function () {
-            return new class implements RegisterResponse {
+            return new class implements RegisterResponse
+            {
                 public function toResponse($request)
                 {
                     return redirect('/attendance');
+                }
+            };
+        });
+
+        // ログアウト後のリダイレクト処理
+        $this->app->singleton(LogoutResponse::class, function () {
+            return new class implements LogoutResponse
+            {
+                public function toResponse($request)
+                {
+                    // ログアウト前のURLからログイン先を判定
+                    $previousUrl = url()->previous();
+
+                    // 管理者画面からのログアウトかチェック
+                    if (str_contains($previousUrl, '/admin/')) {
+                        return redirect('/admin/login');
+                    }
+
+                    return redirect('/login');
                 }
             };
         });
@@ -65,6 +88,7 @@ class FortifyServiceProvider extends ServiceProvider
             if (request()->is('admin/login')) {
                 return view('auth.admin-login');
             }
+
             // 一般ユーザーログイン
             return view('auth.login');
         });
@@ -81,17 +105,12 @@ class FortifyServiceProvider extends ServiceProvider
 
         // ログインバリデーション
         Fortify::authenticateUsing(function (Request $request) {
-            $request->validate([
-                'email' => ['required', 'string', 'email'],
-                'password' => ['required', 'string'],
-            ], [
-                'email.required' => 'メールアドレスを入力してください',
-                'password.required' => 'パスワードを入力してください',
-            ]);
+            $loginRequest = LoginRequest::createFrom($request);
+            $validated = $loginRequest->validate($loginRequest->rules());
 
-            $user = \App\Models\User::where('email', $request->email)->first();
+            $user = \App\Models\User::where('email', $validated['email'])->first();
 
-            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            if ($user && \Illuminate\Support\Facades\Hash::check($validated['password'], $user->password)) {
                 return $user;
             }
 

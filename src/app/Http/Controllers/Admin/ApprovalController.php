@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceCorrectionRequest;
-use App\Models\BreakCorrectionRequest;
 use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
@@ -32,7 +31,7 @@ class ApprovalController extends Controller
         $correctionRequest = AttendanceCorrectionRequest::with([
             'user',
             'attendance.breaks',
-            'breakCorrectionRequests'
+            'breakCorrectionRequests',
         ])->findOrFail($id);
 
         return view('admin.approval.show', compact('correctionRequest'));
@@ -96,34 +95,5 @@ class ApprovalController extends Controller
         }
 
         return redirect()->route('admin.stamp_correction_request.list')->with('success', '申請を承認しました');
-    }
-
-    /**
-     * 申請を却下
-     */
-    public function reject(Request $request, $id)
-    {
-        $request->validate([
-            'rejection_reason' => 'required|string|max:500',
-        ], [
-            'rejection_reason.required' => '却下理由を入力してください',
-            'rejection_reason.max' => '却下理由は500文字以内で入力してください',
-        ]);
-
-        $correctionRequest = AttendanceCorrectionRequest::findOrFail($id);
-
-        if ($correctionRequest->status !== 'pending') {
-            return redirect()->back()->with('error', '既に処理済みの申請です');
-        }
-
-        // 申請ステータスを却下に更新
-        $correctionRequest->update([
-            'status' => 'rejected',
-            'rejected_at' => now(),
-            'rejected_by' => auth()->id(),
-            'rejection_reason' => $request->rejection_reason,
-        ]);
-
-        return redirect('/admin/approval')->with('success', '申請を却下しました');
     }
 }

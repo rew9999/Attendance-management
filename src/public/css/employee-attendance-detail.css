@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    border-left: 4px solid #000;
+}
+
+.detail-card {
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.detail-row {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    min-height: 60px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 200px;
+    padding: 20px 15px 20px 50px;
+    background-color: white;
+    font-weight: bold;
+    font-size: 14px;
+    color: #6d6d6d;
+    display: flex;
+    align-items: center;
+}
+
+.detail-value {
+    margin-left: 50px;
+    width: 100px;
+    padding: 20px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-value.name-value {
+    flex: 1;
+    justify-content: flex-start;
+    margin-right: 50px;
+}
+
+.detail-separator {
+    margin-left: 50px;
+    width: 100px;
+    padding: 20px 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-row:has(.detail-value-full) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.detail-value-full {
+    margin-left: 50px;
+    margin-right: 75px;
+    flex: 1;
+    padding: 20px 50px 20px 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* 時間入力フィールド */
+.time-input {
+    width: 100%;
+    max-width: 100px;
+    padding: 8px 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    background-color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    outline: none;
+}
+
+.time-input:focus {
+    border-color: #999;
+}
+
+/* 時計アイコンを非表示 */
+.time-input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.time-input::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+}
+
+.time-input::-webkit-datetime-edit-text {
+    padding: 0;
+}
+
+.time-input::-webkit-datetime-edit-hour-field,
+.time-input::-webkit-datetime-edit-minute-field {
+    padding: 0;
+}
+
+/* 備考欄 */
+.note-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    outline: none;
+}
+
+.note-textarea:focus {
+    border-color: #999;
+}
+
+/* ボタンコンテナ */
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-button {
+    padding: 12px 40px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+    background-color: #333;
+}

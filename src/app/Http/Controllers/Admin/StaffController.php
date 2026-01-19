@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Attendance;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -19,7 +19,7 @@ class StaffController extends Controller
 
         // 名前で検索
         if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
+            $query->where('name', 'like', '%'.$request->name.'%');
         }
 
         $staff = $query->orderBy('created_at', 'desc')->paginate(20);
@@ -80,7 +80,7 @@ class StaffController extends Controller
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function() use ($attendances) {
+        $callback = function () use ($attendances) {
             $stream = fopen('php://output', 'w');
 
             // BOMを追加（Excel対応）
@@ -103,7 +103,7 @@ class StaffController extends Controller
                 $workMins = $workMinutes % 60;
 
                 fputcsv($stream, [
-                    $date->format('m/d') . '(' . $dayOfWeek . ')',
+                    $date->format('m/d').'('.$dayOfWeek.')',
                     $attendance->clock_in ? Carbon::parse($attendance->clock_in)->format('H:i') : '-',
                     $attendance->clock_out ? Carbon::parse($attendance->clock_out)->format('H:i') : '-',
                     sprintf('%d:%02d', $breakHours, $breakMins),
